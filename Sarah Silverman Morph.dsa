@@ -1,0 +1,84 @@
+// DAZ Studio version 4.21.0.5 filetype DAZ Script
+
+// Function to apply a specific pose preset
+function open_specific_posefile() {
+    var oContentMgr = App.getContentMgr();
+    var specificPoseFile = "E:/DAZ 3D/DAZ 3D/Studio/My Library/People/Genesis 8 Female/Poses/Standing Conversation 2/SC2-Conversation 02 G8FM.duf";
+
+    if (specificPoseFile) {
+        oContentMgr.openFile(specificPoseFile, true);
+    }
+}
+
+// Function to set a face morph
+function setFaceMorph() {
+    var node = Scene.getPrimarySelection();
+    if (node) {
+        var object = node.getObject();
+        var morphName = "FGSarah Silverman 4.20 Morphed with original hot photo";
+        var faceMorph = object.findModifier(morphName);
+        if (faceMorph) {
+            faceMorph.getValueChannel().setValue(1.0);
+        } else {
+            MessageBox.information("Morph '" + morphName + "' not found.", "Error", "&OK");
+        }
+    } else {
+        MessageBox.information("No figure selected", "Error", "&OK");
+    }
+}
+
+// Function to apply textures
+function applyTextures() {
+    var texturePaths = {
+        "Face": "C:/Daz 3D/Applications/Data/DAZ 3D/My DAZ 3D Library/Runtime/Textures/FaceGen/Genesis8F/Sarah Silverman Face Morph Asymmetry Perfect Morph/Sarah Silverman Face Morph Asymmetry Perfect Morph_face.jpg",
+		"Lips": "C:/Daz 3D/Applications/Data/DAZ 3D/My DAZ 3D Library/Runtime/Textures/FaceGen/Genesis8F/Sarah Silverman Face Morph Asymmetry Perfect Morph/Sarah Silverman Face Morph Asymmetry Perfect Morph_face.jpg",
+		"Ears": "C:/Daz 3D/Applications/Data/DAZ 3D/My DAZ 3D Library/Runtime/Textures/FaceGen/Genesis8F/Sarah Silverman Face Morph Asymmetry Perfect Morph/Sarah Silverman Face Morph Asymmetry Perfect Morph_face.jpg",		
+        "EyeSocket": "C:/Daz 3D/Applications/Data/DAZ 3D/My DAZ 3D Library/Runtime/Textures/FaceGen/Genesis8F/Sarah Silverman Face Morph Asymmetry Perfect Morph/Sarah Silverman Face Morph Asymmetry Perfect Morph_face.jpg",		
+		 "Arms": "C:/Daz 3D/Applications/Data/DAZ 3D/My DAZ 3D Library/Runtime/Textures/FaceGen/Genesis8F/Sarah Silverman Face Morph Asymmetry Perfect Morph/Sarah Silverman Face Morph Asymmetry Perfect Morph_arms.jpg",  
+		 "Torso": "C:/Daz 3D/Applications/Data/DAZ 3D/My DAZ 3D Library/Runtime/Textures/FaceGen/Genesis8F/Sarah Silverman Face Morph Asymmetry Perfect Morph/Sarah Silverman Face Morph Asymmetry Perfect Morph_torso.jpg",  
+	     "Legs": "C:/Daz 3D/Applications/Data/DAZ 3D/My DAZ 3D Library/Runtime/Textures/FaceGen/Genesis8F/Sarah Silverman Face Morph Asymmetry Perfect Morph/Sarah Silverman Face Morph Asymmetry Perfect Morph_legs.jpg",  
+		 "Fingernails": "C:/Daz 3D/Applications/Data/DAZ 3D/My DAZ 3D Library/Runtime/Textures/FaceGen/Genesis8F/Sarah Silverman Face Morph Asymmetry Perfect Morph/Sarah Silverman Face Morph Asymmetry Perfect Morph_arms.jpg",  
+		 "Toenails": "C:/Daz 3D/Applications/Data/DAZ 3D/My DAZ 3D Library/Runtime/Textures/FaceGen/Genesis8F/Sarah Silverman Face Morph Asymmetry Perfect Morph/Sarah Silverman Face Morph Asymmetry Perfect Morph_legs.jpg",  
+// Add other parts and their respective texture paths
+    };
+
+    var node = Scene.getPrimarySelection();
+    var nodeShape = node.getObject().getCurrentShape();
+    var numMats = nodeShape.getNumMaterials();
+    var imageMgr = App.getImageMgr();
+
+	var objectShape = node.getObject().getCurrentShape();
+	var numMats = objectShape.getNumMaterials();
+
+	// Iterate over each material
+	for (var mats = 0; mats < numMats; mats++) {
+	    var curMat = objectShape.getMaterial(mats);
+	    var matName = curMat.getName();
+	
+	    // Check if there is a texture path for the current material name
+	    if (texturePaths[matName]) {
+	        var property = curMat.findProperty("Diffuse Color");
+	        if (property) {
+	            property.setMap(texturePaths[matName]);
+	        }
+	    }
+	}
+
+	
+    for (var mats = 0; mats < numMats; mats++) {
+        var curMat = nodeShape.getMaterial(mats);
+        var matName = curMat.getName();
+        debug(matName);
+        if (texturePaths[matName]) {
+            var diffuseTexture = curMat.findProperty("Base Color");
+            if (diffuseTexture) {
+                property.setMap(texturePaths[matName]);
+            }
+        }
+    }
+}
+
+// Main script execution
+setFaceMorph();
+applyTextures();
+//open_specific_posefile();
